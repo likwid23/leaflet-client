@@ -129,7 +129,7 @@ function App() {
       <Button type="submit" onClick={handleSubmit} color="info" >Send</Button>
           </Form>
         </Card>
-        <button type="button">Get Location</button>
+        
         
 </div>
 
