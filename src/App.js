@@ -9,6 +9,8 @@ import {
 } from 'reactstrap'
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import readIcon from './message_location.svg'
+import {MessageContextProvider} from './context/messageContext'
+//import {MessageContext} from './context/messageContext'
 
 
 
@@ -34,15 +36,19 @@ function App() {
     const [message, setMessage] = useState("")
     const [longitude, setLongitude] = useState()
     const [latitude, setLatitude] = useState('')
-    let [responseData, setResponseData] = React.useState('')
+    const [responseData, setResponseData] = useState([])
     const [currentLocation, setCurrentLocation] = React.useState([0, 0]);
+    const [sentMessage, setSentMessage] = useState(false)
+   
     
     
     const handleSubmit = async (e) => {
       e.preventDefault()
       axios.post(API_URL, { name, message, latitude, longitude })
           .then((result) => {
-            console.log(result)
+            console.log(responseData)
+            setSentMessage({sentMessage: true})
+            
           });
    }
    useEffect(() => {
@@ -83,10 +89,10 @@ function App() {
 }, [latitude, longitude]);
 
   return (
-    
+    <MessageContextProvider>
     <div>
-      
-    <MapContainer style={{height: '500px'}}center={[41.905, -74.893]} zoom={6} scrollWheelZoom={false}>
+     
+    <MapContainer style={{height: '800px'}}center={[38.913, -42.730]} zoom={3} scrollWheelZoom={false}>
     <TileLayer
       attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
       url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -95,13 +101,13 @@ function App() {
       
     </Marker> 
     {responseData ? 
-      <div>{responseData.map((data) => {
+      <div>{responseData.map((stuff) => {
          return (
-    <Marker icon={messageIcon} position={currentLocation} key={data._id}>
+    <Marker icon={messageIcon} position={[stuff.latitude, stuff.longitude]} key={stuff._id}>
       <Popup>
            <>
-           <p>{data.name}</p>
-           <p>{data.message}</p>
+           <p>{stuff.name}</p>
+           <p>{stuff.message}</p>
            </>
           
       </Popup>
@@ -110,17 +116,18 @@ function App() {
         }
     
   </MapContainer>
+  {!sentMessage ? 
   <Card body className="message-form">
           <CardTitle tag="h5">Leave a message</CardTitle>
           <Form>
           <FormGroup>
         <Label for="name">Name</Label>
-          <Input   value={name} onChange={(e) => setName(e.target.value)} type="text" name="name" id="name" placeholder="Enter your name." />
+          <Input  required value={name} onChange={(e) => setName(e.target.value)} type="text" name="name" id="name" placeholder="Enter your name." />
       </FormGroup>
       <FormGroup>
         <Label for="message">Message</Label>
           <Input 
-          value={message} onChange={(e) => setMessage(e.target.value)}
+          value={message} required onChange={(e) => setMessage(e.target.value)}
             type="textarea"
              name="message" 
              id="message" 
@@ -128,11 +135,13 @@ function App() {
       </FormGroup>
       <Button type="submit" onClick={handleSubmit} color="info" >Send</Button>
           </Form>
-        </Card>
+        </Card> : <Card body className="message-form">
+          <CardTitle><h5>Message Sent!</h5></CardTitle>
+          </Card>}
         
         
 </div>
-
+</MessageContextProvider>
   );
   }
 
