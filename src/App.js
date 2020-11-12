@@ -9,8 +9,8 @@ import {
 } from 'reactstrap'
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import readIcon from './message_location.svg'
-import {MessageContextProvider} from './context/messageContext'
-//import {MessageContext} from './context/messageContext'
+
+
 
 
 
