@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import L from 'leaflet'
 import './App.css';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
 import axios from 'axios'
 import {
   Card,
@@ -9,6 +9,7 @@ import {
 } from 'reactstrap'
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 import readIcon from './message_location.svg'
+
 
 
 
@@ -39,25 +40,27 @@ function App() {
     const [responseData, setResponseData] = useState([])
     const [currentLocation, setCurrentLocation] = React.useState([0, 0]);
     const [sentMessage, setSentMessage] = useState(false)
+    
    
     
     
-    const handleSubmit = async (e) => {
+    const handleSubmit = (e) => {
       e.preventDefault()
       axios.post(API_URL, { name, message, latitude, longitude })
           .then((result) => {
-            console.log(responseData)
             setSentMessage({sentMessage: true})
-            
-          });
+            setResponseData([...responseData, result.data])
+          })
+        
+
    }
    useEffect(() => {
     const getMessages = () => {
       try {
      axios.get(API_URL)
      .then((response)=>{
-      setResponseData(response.data)
-      //responseData = response.data
+     setResponseData(response.data)
+    
      
   })
   .catch((error) => {
@@ -90,8 +93,7 @@ function App() {
 
   return (
    
-    <div>
-     
+    <div>   
     <MapContainer style={{height: '800px'}}center={[38.913, -42.730]} zoom={3} scrollWheelZoom={false}>
     <TileLayer
       attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
