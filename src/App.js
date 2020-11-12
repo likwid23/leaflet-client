@@ -89,7 +89,7 @@ function App() {
 }, [latitude, longitude]);
 
   return (
-    <MessageContextProvider>
+   
     <div>
      
     <MapContainer style={{height: '800px'}}center={[38.913, -42.730]} zoom={3} scrollWheelZoom={false}>
@@ -141,7 +141,7 @@ function App() {
         
         
 </div>
-</MessageContextProvider>
+
   );
   }
 
