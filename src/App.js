@@ -26,7 +26,7 @@ var messageIcon = L.icon({
   popupAnchor: [0, -41],
 });
 
-const API_URL = 'http://localhost:5000'
+const API_URL = 'https://leaflet-server.herokuapp.com/'
 
 function App() {
  
