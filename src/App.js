@@ -1,7 +1,7 @@
 import { MapContainer, TileLayer, Marker, Popup} from 'react-leaflet'
 import L from 'leaflet'
 import './App.css';
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import {
   Card,
